@@ -1,6 +1,12 @@
 
 FROM python:2.7.18-slim
 
+# Update sources to use archived Debian Buster repositories
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/99no-check-valid-until && \
+    sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list
+
 # Install system deps
 RUN apt-get update && apt-get install -y \
     wget \
